@@ -12,10 +12,8 @@ public class Application {
         var context = new AnnotationConfigApplicationContext(ProjectConfiguration.class);
 
         Person person = context.getBean(Person.class);
-        Vehicle vehicle = context.getBean(Vehicle.class);
 
         System.out.println("Person Name From Spring Context: " + person.getName());
-        System.out.println("Vehicle Name From Spring Context: " + vehicle.getName());
         System.out.println("Vehicle Owned by Person: " + person.getVehicle().getName());
 
     }
