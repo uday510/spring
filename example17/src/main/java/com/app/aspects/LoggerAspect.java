@@ -1,6 +1,6 @@
 package com.app.aspects;
 
-import com.app.services.VehicleService;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -31,15 +31,32 @@ public class LoggerAspect {
         logger.info(joinPoint.getSignature().toString() + " method execution end");
     }
 
-    @AfterThrowing(value = "execution(* com.app.services.*.*(..))", throwing = "ex")
-    public void logAfterThrowing(ProceedingJoinPoint joinPoint, Throwable ex) {
+    @Around("@annotation(com.app.interfaces.LogAspect)")
+    public void logWithAnnotation(ProceedingJoinPoint joinPoint) throws Throwable {
+        logger.info(joinPoint.toString() + " method execution start");
+        Instant start = Instant.now();
+        joinPoint.proceed();
+        Instant finish = Instant.now();
+        long timeElapsed = Duration.between(start, finish).toMillis();
+        logger.info("Time took to execute the method : " + timeElapsed);
+        logger.info(joinPoint.getSignature().toString() + " method execution end");
+    }
+
+    @AfterThrowing(value = "execution(* com.app.services.*.*(..))", throwing = "exception")
+    public void logAfterThrowing(ProceedingJoinPoint joinPoint, Throwable exception) {
         logger.severe("Exception in method : " + joinPoint.getSignature().toString());
-        logger.severe("Exception is : " + ex);
+        logger.severe("Exception is : " + exception);
     }
 
     @AfterReturning(value = "execution(* com.app.services.*.*(..))", returning = "result")
     public void logAfterReturning(ProceedingJoinPoint joinPoint, Object result) {
         logger.info("Method : " + joinPoint.getSignature().toString() + " returned : " + result);
+    }
+
+    @AfterReturning(value = "execution(* com.app.services.*.*(..))", returning = "returnValue")
+    public void logException(JoinPoint joinPoint, Object returnValue) {
+        logger.severe("Exception in method : " + joinPoint.getSignature().toString());
+        logger.severe("Exception is : " + returnValue);
     }
 
 }
