@@ -1,13 +1,11 @@
-package com.app.example18;
+package com.app.example19;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
-public class Example18Application {
-
+@SpringBootApplication()
+public class Example19Application {
     public static void main(String[] args) {
-        SpringApplication.run(Example18Application.class, args);
+        SpringApplication.run(Example19Application.class, args);
     }
-
 }
